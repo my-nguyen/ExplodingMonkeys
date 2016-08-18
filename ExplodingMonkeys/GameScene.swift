@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var buildings = [BuildingNode]()
     // weak reference to the view controller
@@ -25,13 +25,25 @@ class GameScene: SKScene {
         createBuildings()
         // create players
         createPlayers()
+
+        // get notified of collisions
+        physicsWorld.contactDelegate = self
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     }
    
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
+        if banana != nil {
+            // if banana misses the other player and all the buildings and goes off screen
+            if banana.position.y < -1000 {
+                // remove the banana
+                banana.removeFromParent()
+                banana = nil
+                // change players
+                changePlayer()
+            }
+        }
     }
 
     func createBuildings() {
@@ -152,5 +164,100 @@ class GameScene: SKScene {
 
     func deg2rad(degrees: Int) -> Double {
         return Double(degrees) * M_PI / 180.0
+    }
+
+    func didBeginContact(contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+
+        // set the first body to the lower CollisionType and the second body to the higher CollisionType
+        // this will eliminate half of whether "banana hit building" or "building hit banana"
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+
+        // unwrap both bodies, since they might be nil
+        if let firstNode = firstBody.node {
+            if let secondNode = secondBody.node {
+                // a banana hit a building
+                if firstNode.name == "banana" && secondNode.name == "building" {
+                    bananaHitBuilding(secondNode as! BuildingNode, atPoint: contact.contactPoint)
+                }
+
+                // a banana hit a player
+                if firstNode.name == "banana" && secondNode.name == "player1" {
+                    destroyPlayer(player1)
+                }
+
+                if firstNode.name == "banana" && secondNode.name == "player2" {
+                    destroyPlayer(player2)
+                }
+            }
+        }
+    }
+
+    func destroyPlayer(player: SKSpriteNode) {
+        // place an explosion at player's position
+        let explosion = SKEmitterNode(fileNamed: "hitPlayer")!
+        explosion.position = player.position
+        addChild(explosion)
+
+        // remove both player and banana from the scene
+        player.removeFromParent()
+        banana?.removeFromParent()
+
+        // pause for 2 seconds so the player can see who won the game
+        RunAfterDelay(2) { [unowned self] in
+            // create a new scene
+            let newGame = GameScene(size: self.size)
+            // set the new scene's viewController property and update the view controller's currentGame property
+            // so they can talk to each other once the change has occurred
+            newGame.viewController = self.viewController
+            self.viewController.currentGame = newGame
+
+            // transfer control of the game to the other player
+            self.changePlayer()
+            // set the new game's currentPlayer property to this currentPlayer property,
+            // so this player will be next after the other player dies
+            newGame.currentPlayer = self.currentPlayer
+
+            // create a transition to the new scene and cross-fade to the scene over 1.5 seconds
+            let transition = SKTransition.doorwayWithDuration(1.5)
+            self.view?.presentScene(newGame, transition: transition)
+        }
+    }
+
+    func changePlayer() {
+        if currentPlayer == 1 {
+            currentPlayer = 2
+        } else {
+            currentPlayer = 1
+        }
+
+        viewController.activatePlayerNumber(currentPlayer)
+    }
+
+    func bananaHitBuilding(building: BuildingNode, atPoint contactPoint: CGPoint) {
+        // convert the collision contact point to the coordinates relative to the building node
+        let buildingLocation = convertPoint(contactPoint, toNode: building)
+        // damage the building
+        building.hitAtPoint(buildingLocation)
+
+        // create an explosion
+        let explosion = SKEmitterNode(fileNamed: "hitBuilding")!
+        explosion.position = contactPoint
+        addChild(explosion)
+
+        // delete the banana
+        banana.name = ""
+        banana?.removeFromParent()
+        banana = nil
+
+        // change the player
+        changePlayer()
     }
 }
