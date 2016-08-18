@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F2E4BD51D6650D100F41DFF /* assets.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 0F2E4BD41D6650D100F41DFF /* assets.atlas */; };
 		0FE975B31D658161004EF060 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE975B21D658161004EF060 /* AppDelegate.swift */; };
 		0FE975B51D658161004EF060 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0FE975B41D658161004EF060 /* GameScene.sks */; };
 		0FE975B71D658161004EF060 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE975B61D658161004EF060 /* GameScene.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F2E4BD41D6650D100F41DFF /* assets.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = assets.atlas; sourceTree = "<group>"; };
 		0FE975AF1D658161004EF060 /* ExplodingMonkeys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExplodingMonkeys.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE975B21D658161004EF060 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FE975B41D658161004EF060 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 		0FE975B11D658161004EF060 /* ExplodingMonkeys */ = {
 			isa = PBXGroup;
 			children = (
+				0F2E4BD41D6650D100F41DFF /* assets.atlas */,
 				0FE975C81D658194004EF060 /* Helper.swift */,
 				0FE975B21D658161004EF060 /* AppDelegate.swift */,
 				0FE975B41D658161004EF060 /* GameScene.sks */,
@@ -108,6 +111,7 @@
 				TargetAttributes = {
 					0FE975AE1D658161004EF060 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 7VB2FKXMNK;
 					};
 				};
 			};
@@ -137,6 +141,7 @@
 				0FE975B51D658161004EF060 /* GameScene.sks in Resources */,
 				0FE975C11D658161004EF060 /* LaunchScreen.storyboard in Resources */,
 				0FE975BE1D658161004EF060 /* Assets.xcassets in Resources */,
+				0F2E4BD51D6650D100F41DFF /* assets.atlas in Resources */,
 				0FE975BC1D658161004EF060 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,10 +272,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ExplodingMonkeys/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nguyen.ExplodingMonkeys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -278,10 +286,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ExplodingMonkeys/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nguyen.ExplodingMonkeys;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -304,6 +315,7 @@
 				0FE975C71D658161004EF060 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
