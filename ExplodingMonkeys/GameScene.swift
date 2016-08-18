@@ -11,6 +11,8 @@ import SpriteKit
 class GameScene: SKScene {
 
     var buildings = [BuildingNode]()
+    // weak reference to the view controller
+    weak var viewController: GameViewController!
 
     override func didMoveToView(view: SKView) {
         // give the scene a dark blue color to represent the night sky
@@ -49,5 +51,9 @@ class GameScene: SKScene {
 
             buildings.append(building)
         }
+    }
+
+    func launch(angle angle: Int, velocity: Int) {
+        
     }
 }

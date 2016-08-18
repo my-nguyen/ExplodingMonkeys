@@ -11,8 +11,21 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
+    // strong reference to the game scene
+    var currentGame: GameScene!
+    @IBOutlet weak var angleSlider: UISlider!
+    @IBOutlet weak var angleLabel: UILabel!
+    @IBOutlet weak var velocitySlider: UISlider!
+    @IBOutlet weak var velocityLabel: UILabel!
+    @IBOutlet weak var launchButton: UIButton!
+    @IBOutlet weak var playerNumber: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // load up default values for the two sliders
+        angleChanged(angleSlider)
+        velocityChanged(velocitySlider)
 
         if let scene = GameScene(fileNamed:"GameScene") {
             // Configure the view.
@@ -27,6 +40,11 @@ class GameViewController: UIViewController {
             scene.scaleMode = .AspectFill
             
             skView.presentScene(scene)
+
+            // obtain a reference to the game scene
+            currentGame = scene
+            // make sure the game scene knows about the view controller
+            scene.viewController = self
         }
     }
 
@@ -49,5 +67,42 @@ class GameViewController: UIViewController {
 
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+
+    @IBAction func angleChanged(sender: AnyObject) {
+        angleLabel.text = "Angle: \(Int(angleSlider.value))°"
+    }
+
+    @IBAction func velocityChanged(sender: AnyObject) {
+        velocityLabel.text = "Velocity: \(Int(velocitySlider.value))"
+    }
+
+    @IBAction func launch(sender: AnyObject) {
+        // hide all the controls so the user can't try to fire again until it's ready
+        angleSlider.hidden = true
+        angleLabel.hidden = true
+        velocitySlider.hidden = true
+        velocityLabel.hidden = true
+        launchButton.hidden = true
+
+        // have the game scene launch a balana using the current angle and velocity
+        currentGame.launch(angle: Int(angleSlider.value), velocity: Int(velocitySlider.value))
+    }
+
+    // this method will be called from the game scene when control should pass to the other player
+    func activatePlayerNumber(number: Int) {
+        // update the player label to reflect who is in control
+        if number == 1 {
+            playerNumber.text = "<<< PLAYER ONE"
+        } else {
+            playerNumber.text = "PLAYER TWO >>>"
+        }
+
+        // show all the controls again
+        angleSlider.hidden = false
+        angleLabel.hidden = false
+        velocitySlider.hidden = false
+        velocityLabel.hidden = false
+        launchButton.hidden = false
     }
 }
